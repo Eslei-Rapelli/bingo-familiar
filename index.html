@@ -20,42 +20,73 @@
     <section id="welcome" class="panel welcome">
       <p class="eyebrow">A família reunida, onde estiver</p>
       <h1>Bingo Familiar</h1>
-      <p>Crie uma sala ou entre com o código que recebeu.</p>
-      <label>Seu nome<input id="playerName" maxlength="32" placeholder="Ex.: Eslei"></label>
+      <p>Preencha seus dados, depois crie uma sala ou entre com o código que recebeu.</p>
+      <label>Seu nome completo<input id="playerName" maxlength="40" placeholder="Ex.: Eslei Silva" autocomplete="name"></label>
+      <label>Celular (opcional)<input id="playerPhone" type="tel" maxlength="20" placeholder="Ex.: (17) 99999-9999" autocomplete="tel"></label>
+      <div class="two">
+        <label>Estado<select id="playerState"><option value="">Escolha</option></select></label>
+        <label>Cidade<input id="playerCity" maxlength="40" placeholder="Sua cidade" autocomplete="address-level2"></label>
+      </div>
       <div class="two">
         <button id="createRoom" class="primary">Criar sala</button>
         <button id="showJoin" class="secondary">Entrar em uma sala</button>
       </div>
       <div id="joinArea" class="hidden">
-        <label>Código da sala<input id="roomCodeInput" maxlength="12" placeholder="Ex.: FAMILIA75"></label>
+        <label>Código da sala<input id="roomCodeInput" maxlength="12" placeholder="Ex.: K7M2Q" autocapitalize="characters"></label>
         <button id="joinRoom" class="primary full">Entrar</button>
       </div>
-      <p class="note">Protótipo inicial: cadastro e sala demonstrativos neste aparelho. O jogo online entre celulares será conectado ao servidor numa próxima etapa.</p>
+      <p class="note">Quem cria a sala é quem sorteia as bolinhas. Os outros entram com o código e veem tudo no próprio celular, em tempo real. Seu nome, cidade e estado aparecem para quem está na sala; o celular aparece só para quem criou a sala.</p>
     </section>
 
     <section id="game" class="hidden">
       <div class="game-head panel">
-        <div><p class="eyebrow">Sala <strong id="roomCode">------</strong></p><h2 id="hello">Vamos jogar!</h2></div>
-        <button id="leave" class="secondary">Sair</button>
+        <div><p class="eyebrow">Sala <strong id="roomCode">------</strong> · <span id="roundLabel">Rodada 1</span></p><h2 id="hello">Vamos jogar!</h2></div>
+        <div class="head-btns">
+          <button id="shareBtn" class="secondary">📨 Convidar</button>
+          <button id="leave" class="secondary">Sair</button>
+        </div>
+      </div>
+
+      <div id="winnerStrip" class="winner-strip hidden"></div>
+
+      <div class="panel">
+        <div class="section-title"><h3>Participantes</h3><span id="playerCount" class="pill">0 pessoas</span></div>
+        <ul id="players" class="players"></ul>
       </div>
 
       <div class="panel">
-        <div class="section-title"><h3>Participantes</h3><span class="pill">Modo demonstração</span></div>
-        <p id="players">Você está na sala.</p>
-        <div class="section-title"><h3>Como será o sorteio?</h3></div>
-        <div class="two">
-          <button id="autoMode" class="choice selected">⚙️ Automático</button>
-          <button id="manualMode" class="choice">🎱 Globo físico</button>
+        <div class="section-title"><h3>Sorteio</h3></div>
+        <p id="guestNote" class="guest-note hidden"></p>
+
+        <div id="hostControls" class="hidden">
+          <div class="two">
+            <button id="autoMode" class="choice selected">⚙️ Automático</button>
+            <button id="manualMode" class="choice">🎱 Globo físico</button>
+          </div>
+          <div id="manualEntry" class="hidden manual">
+            <label>Número retirado do globo (1 a 75)<input id="manualNumber" type="number" inputmode="numeric" min="1" max="75" placeholder="Digite o número"></label>
+            <button id="registerNumber" class="primary full">Registrar bolinha</button>
+          </div>
+          <div id="autoControls" class="auto-controls">
+            <button id="draw" class="primary full">Sortear próxima bolinha</button>
+            <div class="timer-row">
+              <label>Tempo entre bolinhas
+                <select id="intervalSel">
+                  <option value="3">3 segundos</option><option value="4">4 segundos</option>
+                  <option value="5" selected>5 segundos</option><option value="6">6 segundos</option>
+                  <option value="7">7 segundos</option><option value="8">8 segundos</option>
+                  <option value="9">9 segundos</option><option value="10">10 segundos</option>
+                </select>
+              </label>
+              <button id="autoToggle" class="secondary auto-toggle">▶ Rodar sozinho</button>
+            </div>
+            <p class="note">No modo "rodar sozinho", mantenha este celular com a tela ligada. O app tenta evitar que ela apague.</p>
+          </div>
         </div>
-        <div id="manualEntry" class="hidden manual">
-          <label>Número retirado do globo (1 a 75)<input id="manualNumber" type="number" min="1" max="75" placeholder="Digite o número"></label>
-          <button id="registerNumber" class="primary full">Registrar bolinha</button>
-        </div>
-        <div id="autoControls" class="auto-controls">
-          <button id="draw" class="primary full">Sortear próxima bolinha</button>
-        </div>
+
         <div class="drawn">
-          <span>Última bolinha</span><strong id="lastBall">--</strong>
+          <span>Última bolinha</span>
+          <div class="big"><em id="lastLetter"></em><strong id="lastBall">--</strong></div>
           <small id="drawCount">0 de 75 sorteadas</small>
         </div>
         <div class="section-title"><h3>Números sorteados</h3><button id="reset" class="text-btn">Nova rodada</button></div>
@@ -63,15 +94,44 @@
       </div>
 
       <div class="panel">
+        <div class="section-title"><h3>Voz do sorteio</h3></div>
+        <p class="note tight">Cada pessoa escolhe a voz no próprio celular.</p>
+        <div class="voice-row">
+          <button id="voiceToggle" class="secondary">🗣️ Voz ligada</button>
+          <select id="voiceGender" aria-label="Tipo de voz">
+            <option value="f">Voz feminina</option>
+            <option value="m">Voz masculina</option>
+          </select>
+          <button id="voiceTest" class="text-btn">Testar</button>
+        </div>
+      </div>
+
+      <div class="panel">
         <div class="section-title"><h3>Sua cartela</h3><span class="pill">5 × 5</span></div>
         <div class="bingo-head"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
         <div id="card" class="card-grid"></div>
-        <p class="note">O centro é livre. Os números desta cartela são gerados para esta demonstração.</p>
+        <button id="bingoBtn" class="bingo-btn">🎉 BINGO!</button>
+        <p class="note">As bolinhas sorteadas são marcadas sozinhas. Quando fechar uma linha, coluna ou diagonal, toque em BINGO!</p>
       </div>
-      <div class="panel status"><strong>Conexão:</strong> <span id="connection">Protótipo local, sem conexão com outros jogadores.</span></div>
+      <div class="panel status"><strong>Conexão:</strong> <span id="connection">Conectando…</span></div>
     </section>
   </main>
   <footer>Feito para reunir a família ❤️</footer>
+
+  <div id="victory" class="victory hidden" role="dialog" aria-live="assertive">
+    <div id="confetti" class="confetti" aria-hidden="true"></div>
+    <div class="victory-box">
+      <div class="trophy">🏆</div>
+      <h2 id="winnerName">Fulano</h2>
+      <p>você ganhou!</p>
+      <button id="closeVictory" class="primary full">Fechar</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
