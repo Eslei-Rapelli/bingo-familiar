@@ -1,0 +1,9 @@
+{
+  "name": "Bingo Familiar",
+  "short_name": "Bingo Família",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f3f1e8",
+  "theme_color": "#173d32",
+  "description": "Bingo para reunir a família."
+}

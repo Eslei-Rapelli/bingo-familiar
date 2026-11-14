@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d32">
+  <meta name="description" content="Bingo Familiar: diversão para jogar junto, de perto ou de longe.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <title>Bingo Familiar</title>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">🎱 <span>Bingo Familiar</span></div>
+    <button id="soundToggle" class="icon-btn" aria-label="Ativar ou desligar sons">🔊 Som ligado</button>
+  </header>
+
+  <main>
+    <section id="welcome" class="panel welcome">
+      <p class="eyebrow">A família reunida, onde estiver</p>
+      <h1>Bingo Familiar</h1>
+      <p>Crie uma sala ou entre com o código que recebeu.</p>
+      <label>Seu nome<input id="playerName" maxlength="32" placeholder="Ex.: Eslei"></label>
+      <div class="two">
+        <button id="createRoom" class="primary">Criar sala</button>
+        <button id="showJoin" class="secondary">Entrar em uma sala</button>
+      </div>
+      <div id="joinArea" class="hidden">
+        <label>Código da sala<input id="roomCodeInput" maxlength="12" placeholder="Ex.: FAMILIA75"></label>
+        <button id="joinRoom" class="primary full">Entrar</button>
+      </div>
+      <p class="note">Protótipo inicial: cadastro e sala demonstrativos neste aparelho. O jogo online entre celulares será conectado ao servidor numa próxima etapa.</p>
+    </section>
+
+    <section id="game" class="hidden">
+      <div class="game-head panel">
+        <div><p class="eyebrow">Sala <strong id="roomCode">------</strong></p><h2 id="hello">Vamos jogar!</h2></div>
+        <button id="leave" class="secondary">Sair</button>
+      </div>
+
+      <div class="panel">
+        <div class="section-title"><h3>Participantes</h3><span class="pill">Modo demonstração</span></div>
+        <p id="players">Você está na sala.</p>
+        <div class="section-title"><h3>Como será o sorteio?</h3></div>
+        <div class="two">
+          <button id="autoMode" class="choice selected">⚙️ Automático</button>
+          <button id="manualMode" class="choice">🎱 Globo físico</button>
+        </div>
+        <div id="manualEntry" class="hidden manual">
+          <label>Número retirado do globo (1 a 75)<input id="manualNumber" type="number" min="1" max="75" placeholder="Digite o número"></label>
+          <button id="registerNumber" class="primary full">Registrar bolinha</button>
+        </div>
+        <div id="autoControls" class="auto-controls">
+          <button id="draw" class="primary full">Sortear próxima bolinha</button>
+        </div>
+        <div class="drawn">
+          <span>Última bolinha</span><strong id="lastBall">--</strong>
+          <small id="drawCount">0 de 75 sorteadas</small>
+        </div>
+        <div class="section-title"><h3>Números sorteados</h3><button id="reset" class="text-btn">Nova rodada</button></div>
+        <div id="history" class="balls" aria-live="polite"></div>
+      </div>
+
+      <div class="panel">
+        <div class="section-title"><h3>Sua cartela</h3><span class="pill">5 × 5</span></div>
+        <div class="bingo-head"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
+        <div id="card" class="card-grid"></div>
+        <p class="note">O centro é livre. Os números desta cartela são gerados para esta demonstração.</p>
+      </div>
+      <div class="panel status"><strong>Conexão:</strong> <span id="connection">Protótipo local, sem conexão com outros jogadores.</span></div>
+    </section>
+  </main>
+  <footer>Feito para reunir a família ❤️</footer>
+  <script src="app.js"></script>
+</body>
+</html>
